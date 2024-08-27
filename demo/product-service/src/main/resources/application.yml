@@ -1,0 +1,101 @@
+spring:
+#  autoconfigure:
+#    exclude:
+#      - org.springframework.boot.autoconfigure.r2dbc.R2dbcAutoConfiguration
+#  r2dbc:
+#    url: r2dbc:postgresql://localhost:5432/product-service
+#    username: postgres
+#    password: admin
+#    driver-class-name: org.postgresql.Driver
+#  data:
+#    r2dbc:
+#      repositories:
+#        enabled: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/product-service
+    username: postgres
+    password: admin
+    driver-class-name: org.postgresql.Driver
+  cloud:
+    config:
+      enabled: false
+      #uri: http://localhost:8888
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  redis:
+    host: localhost
+    port: 6379
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  activemq:
+    broker-url: tcp://localhost:61616
+  batch:
+    job:
+      enabled: true
+    initialize-schema: always
+  main:
+    allow-bean-definition-overriding: true
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: health,info,prometheus
+    metrics:
+      export:
+        prometheus:
+          enabled: true
+  sleuth:
+    sampler:
+      probability: 1.0
+  zipkin:
+    base-url: http://localhost:9411
+    enabled: true
+  mail:
+    host: smtp.example.com
+    port: 587
+    username: your-email@example.com
+    password: your-email-password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+
+#rabbitmq:
+#   queue:
+#    product: productQueue
+
+liquibase:
+  change-log: classpath:db/changelog/db.changelog-master.yaml
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      productService:
+        ringBufferSizeInClosedState: 5
+        ringBufferSizeInHalfOpenState: 3
+        waitDurationInOpenState: 10s
+  retry:
+    instances:
+      productService:
+        maxAttempts: 3
+        waitDuration: 500ms
+  ratelimiter:
+    instances:
+      productService:
+        limitForPeriod: 10
+        limitRefreshPeriod: 1s
+        timeoutDuration: 0
+
+logging:
+  level:
+    root: INFO
+    com.example: DEBUG
+

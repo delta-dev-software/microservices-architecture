@@ -1,0 +1,28 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  data:
+    neo4j:
+      uri: bolt://localhost:7687
+      username: neo4j
+      password: password
+      encryption: false
+  session:
+    store-type: redis
+  redis:
+    host: localhost
+    port: 6379
+  quartz:
+    job-store-type: jdbc
+  kafka:
+    bootstrap-servers: localhost:9092
+
+graphql:
+  path: /graphql
+
+camel:
+  spring-boot:
+    enabled: true
+
+openai:
+  api-key: your-openai-api-key

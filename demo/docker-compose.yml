@@ -1,0 +1,155 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: userdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user"]
+      interval: 30s
+      retries: 3
+
+  mysql:
+    image: mysql:8
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: userdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -u root -prootpassword"]
+      interval: 30s
+      retries: 3
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongo-db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - app-network
+
+  redis:
+    image: redis:6.2
+    container_name: redis-cache
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - app-network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-broker
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"  # RabbitMQ broker port
+      - "15672:15672"  # RabbitMQ management console
+    networks:
+      - app-network
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+
+  activemq:
+    image: rmohr/activemq:latest
+    container_name: activemq-broker
+    ports:
+      - "61616:61616"  # ActiveMQ broker port
+      - "8161:8161"  # ActiveMQ management console
+    networks:
+      - app-network
+    volumes:
+      - activemq-data:/var/lib/activemq
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka-broker
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"
+    networks:
+      - app-network
+    depends_on:
+      - zookeeper
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - app-network
+
+  neo4j:
+    image: neo4j:4.4
+    container_name: neo4j-db
+    environment:
+      NEO4J_AUTH: neo4j/password
+    ports:
+      - "7474:7474"  # Neo4j Browser
+      - "7687:7687"  # Bolt protocol
+    volumes:
+      - neo4j-data:/data
+    networks:
+      - app-network
+
+  liquibase:
+    image: liquibase/liquibase:latest
+    container_name: liquibase
+    environment:
+      LIQUIBASE_URL: jdbc:postgresql://postgres-db:5432/userdb
+      LIQUIBASE_USERNAME: user
+      LIQUIBASE_PASSWORD: password
+      LIQUIBASE_CHANGELOG_FILE: /liquibase/changelog/db.changelog-master.xml
+    volumes:
+      - ./liquibase:/liquibase
+    networks:
+      - app-network
+    depends_on:
+      - postgres
+
+volumes:
+  postgres-data:
+  mysql-data:
+  mongo-data:
+  redis-data:
+  rabbitmq-data:
+  activemq-data:
+  neo4j-data:
+
+networks:
+  app-network:
+    driver: bridge

@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: users
+      changes:
+        - modifyDataType:
+            columnName: created_at
+            newDataType: timestamp
+            tableName: users
+        - modifyDataType:
+            columnName: updated_at
+            newDataType: timestamp
+            tableName: users
+        - modifyDataType:
+            columnName: version
+            newDataType: int
+            tableName: users

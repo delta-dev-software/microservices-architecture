@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/user-service
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  #liquibase:
+   # change-log: classpath:db/changelog/db.changelog-master.yaml
+  redis:
+    host: localhost
+    port: 6379
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+server:
+  port: 8080
+
+jwt:
+  secret: aWn/5w94+zGHFzZjKi4Y0F9s8F5v8qErF1RH6K35qwE=
