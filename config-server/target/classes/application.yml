@@ -1,0 +1,22 @@
+server:
+  port: 8888 # This is the default port for Spring Cloud Config Server
+
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/delta-dev-software/git-test
+          clone-on-start: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, refresh
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    instance:
+      prefer-ip-address: true

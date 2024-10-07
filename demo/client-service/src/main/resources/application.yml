@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: client-service
+  h2:
+    console:
+      enabled: true  # Enables H2 console for debugging and testing
+  datasource:
+    url: jdbc:h2:mem:testdb  # In-memory database URL
+    driver-class-name: org.h2.Driver
+    username: sa  # Default username
+    password: password  # Default password
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect  # Hibernate dialect for H2
+    hibernate:
+      ddl-auto: update  # Automatically creates/upgrades the database schema
+    show-sql: true  # Show SQL statements in the console (for debugging)
+
+
+  main:
+    allow-bean-definition-overriding: true  # Optional: Custom application-specific configurations
+app:
+  custom-property: "value"  # Example custom property, add more as needed
+server:
+  port: 8200
+otel:
+  service:
+    name: client-service
+  trace:
+    exporter: otlp
+    endpoint: localhost:4317  # Ensure this matches Jaeger's gRPC endpoint if you're using it
+  cache:
+    type: ehcache # or caffeine
+    cache-names: yourCacheName # Specify your cache name

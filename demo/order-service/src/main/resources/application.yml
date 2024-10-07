@@ -1,7 +1,11 @@
 server:
   port: 8080
 
+
 spring:
+  main:
+    allow-bean-definition-overriding: true
+
   application:
     name: order-service
 
@@ -51,7 +55,7 @@ spring:
   # Elasticsearch Configuration
   elasticsearch:
     client:
-      uris: http://localhost:9200
+      uris: http://localhost:9100
     index:
       orders: orders_index
 
@@ -84,7 +88,7 @@ spring:
     endpoints:
       web:
         exposure:
-          include: health,info,metrics
+          include: health,info,metrics, refresh
     endpoint:
       health:
         show-details: always
@@ -140,7 +144,65 @@ spring:
         - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
     allow-bean-definition-overriding: true
 
+
+  cloud:
+    compatibility-verifier:
+                     enabled: false
 custom:
   retry:
     max-attempts: 5
     backoff-delay: 1000
+
+  application:
+    name: your-application-name  # Set your application name here
+  zipkin:
+    base-url: http://localhost:9411  # Zipkin server URL
+  sleuth:
+    sampler:
+      probability: 1.0  # Set to 1.0 for 100% sampling; adjust as needed
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - prometheus  # Expose Prometheus metrics
+  endpoint:
+    prometheus:
+      enabled: true  # Enable Prometheus metrics endpoint
+  metrics:
+    tags:
+      enabled: true  # Enable tagging for metrics
+
+#  datasource:
+#    url: jdbc:h2:mem:testdb
+#    driverClassName: org.h2.Driver
+#    username: sa
+#    password: password
+#  h2:
+#    console:
+#      enabled: true
+#  jpa:
+#    database-platform: org.hibernate.dialect.H2Dialect
+#  cloud:
+#    config:
+#      uri: http://localhost:8888
+  quartz:
+    job-store-type: memory # Use "memory" for in-memory jobs, or "jdbc" for persistent jobs in a database
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceName: QuartzScheduler
+            instanceId: AUTO
+          threadPool:
+            threadCount: 10
+          jobStore:
+            class: org.quartz.simpl.RAMJobStore # Use RAMJobStore for in-memory, or JobStoreTX for JDBC persistence
+ # This must match the configuration file name on the config server
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka/
+#    instance:
+#      prefer-ip-address: true

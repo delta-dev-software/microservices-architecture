@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      routes:
+        - id: product-service
+          uri: lb://product-service  # This refers to the service registered in Eureka
+          predicates:
+            - Path=/product-service/**  # Requests to /service1/ will be routed to service1
+          filters:
+            - StripPrefix=1  # This will remove the first part of the path
+
+        - id: service2-route
+          uri: lb://service2
+          predicates:
+            - Path=/service2/**
+          filters:
+            - StripPrefix=1
+
+        - id: service3-route
+          uri: lb://service3
+          predicates:
+            - Path=/service3/**
+          filters:
+            - StripPrefix=1
+
+# Eureka configuration (if you are using Eureka)
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/  # URL of your Eureka server
+  instance:
+    preferIpAddress: true
+
+# Optional: Configure Spring Cloud LoadBalancer settings (if needed)
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true  # Enable retries
+        max-attempts: 3
+        backoff:
+          delay: 500  # Initial delay in ms
+          max-delay: 1000  # Maximum delay in ms
+          multiplier: 2.0  # Multiplier for exponential backoff

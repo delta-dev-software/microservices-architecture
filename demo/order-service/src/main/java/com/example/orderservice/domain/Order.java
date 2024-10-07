@@ -5,15 +5,19 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Document(collection = "orders")
-public class Order  implements Serializable {
+public class Order  implements Serializable,Cloneable {
     @Id
     private String id;
     private String customerId;
     private String productId;
     private int quantity;
     private LocalDateTime orderDate;
+    private String status;
+    private  boolean processed;
 
     // Constructors
     public Order(String id, String customerId, String productId, int quantity, LocalDateTime orderDate) {
@@ -24,7 +28,23 @@ public class Order  implements Serializable {
         this.orderDate = orderDate;
     }
 
+    public boolean isProcessed() {
+        return processed;
+    }
+
+    public void setProcessed(boolean processed) {
+        this.processed = processed;
+    }
+
     public Order() {
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     // Getters and Setters
@@ -115,5 +135,14 @@ public class Order  implements Serializable {
                 ", quantity=" + quantity +
                 ", orderDate=" + orderDate +
                 '}';
+    }
+
+    @Override
+    public Order clone() {
+        try {
+            return (Order) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException("Clone not supported", e);
+        }
     }
 }

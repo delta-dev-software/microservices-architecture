@@ -22,6 +22,10 @@ public class ProductController {
         this.productService = productService;
     }
 
+    @GetMapping("/welcome")
+    public String welcome(){
+        return "hellow world ! ";
+    }
     // Create a new product
     @PostMapping
     public ResponseEntity<Product> createProduct(@Valid @RequestBody Product productRequest) {

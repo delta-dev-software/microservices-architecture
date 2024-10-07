@@ -24,3 +24,10 @@ server:
 
 jwt:
   secret: aWn/5w94+zGHFzZjKi4Y0F9s8F5v8qErF1RH6K35qwE=
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    instance:
+      prefer-ip-address: true

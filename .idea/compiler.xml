@@ -4,14 +4,20 @@
     <excludeFromCompile>
       <directory url="file://$PROJECT_DIR$/demo/user-service/src/main/resources/archetype-resources" includeSubdirectories="true" />
       <directory url="file://$PROJECT_DIR$/demo/product-service/src/main/resources/archetype-resources" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/gateway-service/src/main/resources/archetype-resources" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/demo/client-service/src/main/resources/archetype-resources" includeSubdirectories="true" />
     </excludeFromCompile>
     <annotationProcessing>
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="config-server" />
+        <module name="gateway-service" />
+        <module name="sevice-discovery" />
         <module name="user-service" />
         <module name="order-service" />
+        <module name="client-service" />
       </profile>
       <profile name="Annotation profile for microservices-architecture" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -73,7 +79,10 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="config-server" options="-parameters" />
       <module name="demo" options="" />
+      <module name="gateway-service" options="-parameters" />
+      <module name="sevice-discovery" options="-parameters" />
     </option>
   </component>
 </project>

@@ -1,6 +1,6 @@
 package com.example.orderservice.infrastructure.config;
 
-/*
+
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -18,7 +18,7 @@ public class ElasticsearchConfig {
     @Bean
     public RestHighLevelClient customElasticsearchClient() {
         ClientConfiguration clientConfiguration = ClientConfiguration.builder()
-                .connectedTo("localhost:9200")
+                .connectedTo("localhost:9100")
                 .build();
 
         return RestClients.create(clientConfiguration).rest();
@@ -30,4 +30,4 @@ public class ElasticsearchConfig {
     }
 
 }
-*/
+

@@ -1,0 +1,7 @@
+spring:
+  cloud:
+    config:
+      uri: http://localhost:8888
+      #import: configserver:http://localhost:8888
+      #fail-fast: true
+      #label: master # Fail fast if config server is not available
